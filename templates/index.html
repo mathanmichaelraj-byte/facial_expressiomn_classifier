@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Expression Classification - CNN Deep Learning</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-smile-beam"></i> Facial Expression Classification
+            </a>
+            <span class="navbar-text">CNN Deep Learning Project</span>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> <strong>Features:</strong> Live Webcam Detection | Image Upload & Prediction | Real-time Face Detection
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs" id="mainTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button">
+                    <i class="fas fa-upload"></i> Upload Image
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="live-tab" data-bs-toggle="tab" data-bs-target="#live" type="button">
+                    <i class="fas fa-video"></i> Live Webcam
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button">
+                    <i class="fas fa-info"></i> About
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-3" id="mainTabContent">
+            <!-- Upload Tab -->
+            <div class="tab-pane fade show active" id="upload" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <i class="fas fa-image"></i> Upload Image
+                            </div>
+                            <div class="card-body">
+                                <form id="uploadForm" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="fileInput" class="form-label">Select an image with a face</label>
+                                        <input class="form-control" type="file" id="fileInput" name="file" accept="image/*" required>
+                                        <div class="form-text">Supported formats: PNG, JPG, JPEG, GIF, BMP (Max 16MB)</div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search"></i> Classify Expression
+                                    </button>
+                                </form>
+                                <div id="uploadStatus" class="mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-chart-bar"></i> Results
+                            </div>
+                            <div class="card-body">
+                                <div id="previewSection" style="display: none;">
+                                    <img id="imagePreview" src="" class="img-fluid rounded mb-3" style="max-height: 300px;">
+                                </div>
+                                <div id="resultsSection" style="display: none;">
+                                    <h5>Detection Results</h5>
+                                    <div id="resultsList"></div>
+                                </div>
+                                <div id="noResults" class="text-center text-muted">
+                                    <i class="fas fa-arrow-left"></i> Upload an image to see results
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Webcam Tab -->
+            <div class="tab-pane fade" id="live" role="tabpanel">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-danger text-white">
+                                <i class="fas fa-video"></i> Live Webcam Detection
+                            </div>
+                            <div class="card-body text-center">
+                                <p class="text-muted">Real-time facial expression classification using your webcam</p>
+                                <div class="video-container">
+                                    <img id="videoFeed" data-src="{{ url_for('video_feed') }}" alt="Live Video Feed" class="img-fluid rounded" style="max-width: 640px;">
+                                </div>
+                                <div class="mt-3">
+                                    <small class="text-muted">
+                                        <i class="fas fa-exclamation-triangle"></i> Make sure your webcam is connected and permissions are granted
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Tab -->
+            <div class="tab-pane fade" id="about" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <i class="fas fa-book"></i> About This Project
+                            </div>
+                            <div class="card-body">
+                                <h4>Facial Expression Classification using CNN Deep Learning</h4>
+                                <p>This project implements a deep Convolutional Neural Network (CNN) for classifying human facial expressions into 7 categories:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li><strong>Angry</strong></li>
+                                            <li><strong>Disgust</strong></li>
+                                            <li><strong>Fear</strong></li>
+                                            <li><strong>Happy</strong></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li><strong>Neutral</strong></li>
+                                            <li><strong>Sad</strong></li>
+                                            <li><strong>Surprise</strong></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <h5 class="mt-4">Features</h5>
+                                <ul>
+                                    <li>Deep CNN architecture with multiple convolutional blocks, batch normalization, and dropout</li>
+                                    <li>Data augmentation for improved generalization</li>
+                                    <li>Real-time face detection using OpenCV Haar Cascades</li>
+                                    <li>Live webcam feed with on-the-fly classification</li>
+                                    <li>Image upload with multiple face detection support</li>
+                                    <li>Confidence scores and probability distribution</li>
+                                    <li>Comprehensive training pipeline with callbacks</li>
+                                    <li>Exception handling and logging throughout</li>
+                                </ul>
+                                
+                                <h5 class="mt-4">Technologies Used</h5>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-primary">Python</span>
+                                    <span class="badge bg-success">TensorFlow/Keras</span>
+                                    <span class="badge bg-info">OpenCV</span>
+                                    <span class="badge bg-warning text-dark">Flask</span>
+                                    <span class="badge bg-secondary">NumPy</span>
+                                    <span class="badge bg-danger">Scikit-learn</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <div class="container">
+            <p class="mb-0">Facial Expression Classification using CNN Deep Learning | Created for Project Reference</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
